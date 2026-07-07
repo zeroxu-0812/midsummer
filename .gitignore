@@ -1,12 +1,17 @@
-# 测试与截图
+# 测试与临时截图（不提交）
 test_app.py
 *_screenshot*.png
-*_preview*.png
+tmp_*.png
+
+# 需要保留的图片放在 assets/ 目录下，不受上面规则影响
 
 # macOS
 .DS_Store
 
-# 构建中间产物
+# 构建中间产物（不提交）
 *.iconset/
 *.icns
 build_app.py
+
+# 根目录的临时预览图（仅本地生成，正式图片请放 assets/）
+readme_preview.png
