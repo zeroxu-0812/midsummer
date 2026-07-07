@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COUNTDOWN</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 左上角品牌标识 -->
+    <div class="brand">
+        <span class="brand-mark">[ M.M ]</span>
+        <span class="brand-sub">OFF — DUTY / MMⅥ</span>
+    </div>
+
+    <!-- 右上角编号（可点击切换的系列，Margiela 0-23 数字系统）-->
+    <div class="series-no" id="seriesSelector" title="点击切换系列">
+        <span class="sn-label">N°</span>
+        <button class="sn-num" id="seriesNum" aria-label="切换系列">22</button>
+        <span class="sn-name" id="seriesName">— TIMEPIECE</span>
+    </div>
+
+    <!-- 主体 -->
+    <main class="stage">
+        <!-- 上方状态行 -->
+        <div class="meta-row">
+            <span class="meta-status" id="statusText">—</span>
+            <span class="meta-divider"></span>
+            <span class="meta-title" id="title">UNTIL</span>
+        </div>
+
+        <!-- 倒计时 -->
+        <div class="countdown">
+            <div class="time-block">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">HRS</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-block">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">MIN</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-block">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">SEC</span>
+            </div>
+        </div>
+
+        <!-- 进度 -->
+        <div class="progress-section">
+            <div class="progress-meta">
+                <span id="progressLabel">PROGRESS</span>
+                <span class="progress-percent" id="progressPercent">0.0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-ticks">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 日程：解构式列表 -->
+    <section class="schedule">
+        <div class="schedule-head">— SCHEDULE / 日程</div>
+        <div class="schedule-item" data-no="01">
+            <span class="sch-no">01</span>
+            <span class="sch-name">ONSET / 开始</span>
+            <span class="sch-time">09:00</span>
+        </div>
+        <div class="schedule-item" data-no="11">
+            <span class="sch-no">11</span>
+            <span class="sch-name">INTERLUDE / 午休</span>
+            <span class="sch-time">12:30 — 14:00</span>
+        </div>
+        <div class="schedule-item" data-no="22">
+            <span class="sch-no">22</span>
+            <span class="sch-name">DEPARTURE / 下班</span>
+            <span class="sch-time">18:30</span>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="foot">
+        <div class="foot-left">
+            <span class="ft-label">CURRENT</span>
+            <span class="ft-time" id="currentTime">--:--:--</span>
+        </div>
+        <div class="foot-motto" id="motto">—</div>
+        <div class="foot-right">
+            <span class="ft-label">TODAY</span>
+            <span class="ft-date" id="currentDate">--/--</span>
+        </div>
+    </footer>
+
+    <!-- Margiela 招牌白色十字缝线标（四角锚点）-->
+    <div class="stitch stitch-tl" aria-hidden="true"></div>
+    <div class="stitch stitch-tr" aria-hidden="true"></div>
+    <div class="stitch stitch-bl" aria-hidden="true"></div>
+    <div class="stitch stitch-br" aria-hidden="true"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

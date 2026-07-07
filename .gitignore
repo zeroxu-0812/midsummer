@@ -1,0 +1,12 @@
+# 测试与截图
+test_app.py
+*_screenshot*.png
+*_preview*.png
+
+# macOS
+.DS_Store
+
+# 构建中间产物
+*.iconset/
+*.icns
+build_app.py
