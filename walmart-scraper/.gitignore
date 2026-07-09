@@ -1,0 +1,14 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 虚拟环境
+.venv/
+venv/
+
+# 本地凭据（.env 含真实飞书凭据，绝不提交）
+.env
+
+# 爬取结果数据（运行期生成）
+*.csv
+*.xlsx
