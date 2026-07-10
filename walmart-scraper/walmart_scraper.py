@@ -46,6 +46,7 @@ SORT_OPTIONS = [
     ("price_low",   "价格从低到高"),
     ("price_high",  "价格从高到低"),
     ("rating_high", "评分最高"),
+    ("best_seller", "销量最高"),
     ("new",         "最新上架"),
 ]
 DEFAULT_SORT = "best_match"

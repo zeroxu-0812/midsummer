@@ -111,6 +111,7 @@ _SORT_PATTERNS: list[tuple[str, re.Pattern]] = [
     ("price_low",  re.compile(r"(价格从低到高|价格低|从低到高|低价|price\s*low|low\s*to\s*high|price_low)", re.I)),
     ("price_high", re.compile(r"(价格从高到低|价格高|从高到低|高价|price\s*high|high\s*to\s*low|price_high)", re.I)),
     ("rating_high", re.compile(r"(评分最高|评分|好评|rating|highest\s*rating|rating_high)", re.I)),
+    ("best_seller", re.compile(r"(销量|畅销|热销|卖得最多|best\s*seller|top\s*seller|best_seller)", re.I)),
     ("new",        re.compile(r"(最新|新品|newest|new)", re.I)),
 ]
 _PAGES_RE = re.compile(r"(\d+)\s*(?:页|pages?|p)\b", re.I)
@@ -140,12 +141,21 @@ def parse_walmart_intent(msg) -> tuple[bool, "str | None", str, "int | None"]:
 
     返回 (is_at_bot, 商品名 or None, sort, pages or None)。
     - is_at_bot：mentions 含 mentioned_type == 'app'
+    - is_at_bot：群聊只要被 @（本应用仅订阅 group_at_msg）；或 p2p 私聊直接视为对话。
+    - 被 @ 或私聊后，直接把消息里的英文内容当商品查询（不强制触发词）。
     - 商品名：英文产品词（Walmart 商品名为英文），未识别返回 None
     - sort：默认 best_match
     - pages：未指定返回 None（调用方用默认值）
     """
     mentions = msg.mentions or []
-    is_at_bot = any(getattr(m, "mentioned_type", None) == "app" for m in mentions)
+    chat_type = getattr(msg, "chat_type", "") or ""
+    # 私聊直接处理；群聊只要存在 @（本应用仅订阅 im:message.group_at_msg，
+    # 能收到的群消息必然是 @本机器人）。mentioned_type == 'app' 作为额外兜底。
+    is_at_bot = (
+        chat_type == "p2p"
+        or bool(mentions)
+        or any(getattr(m, "mentioned_type", None) == "app" for m in mentions)
+    )
 
     if msg.message_type != "text":
         return is_at_bot, None, "best_match", None
@@ -158,9 +168,7 @@ def parse_walmart_intent(msg) -> tuple[bool, "str | None", str, "int | None"]:
     clean = _AT_PLACEHOLDER_RE.sub("", text)
     lowered = clean.lower()
 
-    # 必须含 Walmart 触发词，否则不是本机器人的活
-    if not any(t in lowered for t in _WALMART_TRIGGERS):
-        return is_at_bot, None, "best_match", None
+    # 不强制触发词：被 @ 或私聊即视为查询（机器人专做 Walmart 搜索）
 
     # 1) 页数
     pages = None
@@ -229,9 +237,23 @@ def run_walmart(query: str, sort: str, pages: int) -> dict:
 
 def _handle_message_receive(data) -> None:
     msg = data.event.message
+    chat_type = getattr(msg, "chat_type", "") or ""
+    mention_count = len(msg.mentions or [])
+    lark.logger.info(
+        f"收到消息: chat_type={chat_type} type={msg.message_type} "
+        f"mentions={mention_count} chat_id={msg.chat_id}"
+    )
+    # 打印原始内容（调试用，确认群聊 @ 后解析到的文本）
+    try:
+        raw_text = json.loads(msg.content).get("text", "") if msg.message_type == "text" else ""
+        lark.logger.info(f"原始内容: {raw_text!r}")
+    except Exception:
+        pass
     is_at_bot, product, sort, pages = parse_walmart_intent(msg)
     if not is_at_bot:
         return  # 没被 @，忽略
+
+    lark.logger.info(f"已识别 @本机器人: product={product!r} sort={sort} pages={pages}")
 
     if not product:
         _reply_text(

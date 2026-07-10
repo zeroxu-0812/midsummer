@@ -71,8 +71,8 @@ WALMART_REPORT_FOLDER_TOKEN = _optional_env("WALMART_REPORT_FOLDER_TOKEN")
 # 爬取默认参数
 # ============================================================================
 
-WALMART_DEFAULT_PAGES = int(os.getenv("WALMART_DEFAULT_PAGES", "2"))
-WALMART_MAX_PAGES = int(os.getenv("WALMART_MAX_PAGES", "5"))
+WALMART_DEFAULT_PAGES = int(os.getenv("WALMART_DEFAULT_PAGES", "3"))
+WALMART_MAX_PAGES = int(os.getenv("WALMART_MAX_PAGES", "25"))
 WALMART_DEFAULT_SORT = os.getenv("WALMART_DEFAULT_SORT", "best_match")
 
 
